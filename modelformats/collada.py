@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 # Contains implementation of COLLADA .dae model format
-# Copyright (c) 2015 Tomasz Kapu�ci�ski
+# Copyright (c) 2015 Tomasz Kapuściński
 
-from modelformats import modelformat
 import geometry
+from modelformats import ModelFormat, register_format, register_extension
 from xml.dom import minidom
 
 
-class COLLADAFormat(modelformat.ModelFormat):
+class COLLADAFormat(ModelFormat):
     def __init__(self):
         self.description = 'COLLADA .dae format'
 
@@ -61,5 +61,5 @@ class COLLADAFormat(modelformat.ModelFormat):
         return True
 
 
-modelformat.register_format('collada', COLLADAFormat())
-modelformat.register_extension('dae', 'collada')
+register_format('collada', COLLADAFormat())
+register_extension('dae', 'collada')

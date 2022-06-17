@@ -4,62 +4,17 @@
 
 import geometry
 
-formats: dict[str, 'ModelFormat'] = {}
+from modelformats.model import ModelFormat
+
+formats: dict[str, ModelFormat] = {}
 extensions: dict[str, str] = {}
-
-
-# base class for formats
-class ModelFormat:
-    description: str
-
-    def get_extension(self) -> str:
-        return None
-
-    def read(self, filename: str, model: geometry.Model, params: dict[str, str]) -> bool:
-        print('Reading not implemented')
-        return False
-
-    def write(self, filename: str, model: geometry.Model, params: dict[str, str]) -> bool:
-        print('Writing not implemented')
-        return False
-
-# default model format -- chooses format based on filename extension
-
-
-class DefaultModelFormat(ModelFormat):
-    description: str
-
-    def __init__(self):
-        self.description = 'Default model format'
-
-    def read(self, filename: str, model: geometry.Model, params: dict[str, str]) -> bool:
-        ext = get_extension(filename)
-        format = get_format_by_extension(ext)
-
-        if format is None:
-            print('Unknown default format. File ' + filename + ' cannot be processed.')
-            return False
-
-        return format.read(filename, model, params)
-
-    def write(self, filename: str, model: geometry.Model, params: dict[str, str]) -> bool:
-        ext = get_extension(filename)
-        format = get_format_by_extension(ext)
-
-        if format is None:
-            print('Unknown default format. File ' + filename + ' cannot be processed.')
-            return False
-
-        return format.write(filename, model, params)
-
 
 # registers format
 def register_format(name: str, fmt: ModelFormat) -> None:
     formats[name] = fmt
 
+
 # registers filename extension that translates to given format
-
-
 def register_extension(ext: str, name: str) -> None:
     extensions[ext] = name
 
@@ -217,5 +172,21 @@ def get_param(params: dict[str, str], name: str, default: str = None) -> str:
     else:
         return default
 
+def parse_vertex(values: list[str]) -> geometry.Vertex:
+    vertex_coord = geometry.VertexCoord(float(values[2]), float(values[3]), float(values[4]))
+    normal = geometry.Normal(float(values[6]), float(values[7]), float(values[8]))
+    tex_coord_1 = geometry.TexCoord(float(values[10]), float(values[11]))
+    tex_coord_2 = geometry.TexCoord(float(values[13]), float(values[14]))
 
-register_format('default', DefaultModelFormat())
+    return geometry.Vertex(vertex_coord, normal, tex_coord_1, tex_coord_2)
+
+
+def parse_material(values: list[str]) -> geometry.Material:
+    material = geometry.Material()
+
+    for i in range(4):
+        material.diffuse[i] = float(values[2+i])
+        material.ambient[i] = float(values[7+i])
+        material.specular[i] = float(values[12+i])
+
+    return material

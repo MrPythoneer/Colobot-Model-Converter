@@ -4,11 +4,13 @@
 # Copyright (c) 2014 Tomasz Kapuściński
 
 import sys
-from modelformats import modelformat
+
+import modelformats
 
 # put libraries with model format implementations here
-from modelformats import objformat
-from modelformats import colobotformat
+import modelformats.defaultmodel
+import modelformats.obj
+import modelformats.colobot
 
 # parse arguments
 i = 1
@@ -84,9 +86,9 @@ while i < n:
 
         listfile.close()
         i += 2
-        modelformat.print_formats()
+        modelformats.print_formats()
         exit()
-        modelformat.print_extensions()
+        modelformats.print_extensions()
         exit()
     else:
         print('Unknown switch: {}'.format(arg))
@@ -95,6 +97,6 @@ while i < n:
 
 # convert file
 if batch_mode:
-    modelformat.convert_list(file_list, in_format, in_params, out_format, out_params)
+    modelformats.convert_list(file_list, in_format, in_params, out_format, out_params)
 else:
-    modelformat.convert(in_format, in_filename, in_params, out_format, out_filename, out_params)
+    modelformats.convert(in_format, in_filename, in_params, out_format, out_filename, out_params)

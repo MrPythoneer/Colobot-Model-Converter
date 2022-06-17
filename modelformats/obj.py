@@ -4,11 +4,11 @@
 
 import re
 
-from modelformats import modelformat
+import modelformats
 import geometry
 
 
-class ObjFormat(modelformat.ModelFormat):
+class ObjFormat(modelformats.ModelFormat):
     description: str
 
     def __init__(self):
@@ -31,13 +31,13 @@ class ObjFormat(modelformat.ModelFormat):
         flipY = 1.0
         flipZ = 1.0
 
-        if modelformat.get_param(params, 'flipX') is not None:
+        if modelformats.get_param(params, 'flipX') is not None:
             flipX = -1.0
 
-        if modelformat.get_param(params, 'flipY') is not None:
+        if modelformats.get_param(params, 'flipY') is not None:
             flipY = -1.0
 
-        if modelformat.get_param(params, 'flipZ') is not None:
+        if modelformats.get_param(params, 'flipZ') is not None:
             flipZ = -1.0
 
         flipOrder = (flipX * flipY * flipZ) < 0
@@ -115,13 +115,13 @@ class ObjFormat(modelformat.ModelFormat):
         flipY = 1.0
         flipZ = 1.0
 
-        if modelformat.get_param(params, 'flipX') is not None:
+        if modelformats.get_param(params, 'flipX') is not None:
             flipX = -1.0
 
-        if modelformat.get_param(params, 'flipY') is not None:
+        if modelformats.get_param(params, 'flipY') is not None:
             flipY = -1.0
 
-        if modelformat.get_param(params, 'flipZ') is not None:
+        if modelformats.get_param(params, 'flipZ') is not None:
             flipZ = -1.0
 
         flipOrder = (flipX * flipY * flipZ) < 0
@@ -252,17 +252,11 @@ class ObjFormat(modelformat.ModelFormat):
         return True
 
 
-modelformat.register_format('obj', ObjFormat())
-
-modelformat.register_extension('obj', 'obj')
-
-
 # state regex pattern
 state_pattern = re.compile(r'^.+(\[(.+?)\])$')
 
+
 # reads Wavefront .MTL material file
-
-
 def read_mtl_file(filename: str) -> list[geometry.Material]:
     materials: list[geometry.Material] = {}
 
@@ -303,3 +297,7 @@ def read_mtl_file(filename: str) -> list[geometry.Material]:
     input_file.close()
 
     return materials
+
+
+modelformats.register_format('obj', ObjFormat())
+modelformats.register_extension('obj', 'obj')
