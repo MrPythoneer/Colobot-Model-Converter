@@ -4,13 +4,11 @@
 # Copyright (c) 2014 Tomasz Kapuściński
 
 import sys
-import geometry
-import modelformat
+from modelformats import modelformat
 
 # put libraries with model format implementations here
-import objformat
-import colobotformat
-#import colladaformat
+from modelformats import objformat
+from modelformats import colobotformat
 
 # parse arguments
 i = 1
@@ -86,21 +84,17 @@ while i < n:
 
         listfile.close()
         i += 2
-    elif arg == '-f':
         modelformat.print_formats()
         exit()
-    elif arg == '-ext':
         modelformat.print_extensions()
         exit()
     else:
         print('Unknown switch: {}'.format(arg))
         exit()
 
-# convert file
 
+# convert file
 if batch_mode:
-    modelformat.convert_list(file_list, in_format,
-                             in_params, out_format, out_params)
+    modelformat.convert_list(file_list, in_format, in_params, out_format, out_params)
 else:
-    modelformat.convert(in_format, in_filename, in_params,
-                        out_format, out_filename, out_params)
+    modelformat.convert(in_format, in_filename, in_params, out_format, out_filename, out_params)

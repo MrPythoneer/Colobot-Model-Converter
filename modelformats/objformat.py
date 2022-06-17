@@ -3,7 +3,8 @@
 # Copyright (c) 2014 Tomasz Kapuściński
 
 import re
-import modelformat
+
+from modelformats import modelformat
 import geometry
 
 
@@ -30,13 +31,13 @@ class ObjFormat(modelformat.ModelFormat):
         flipY = 1.0
         flipZ = 1.0
 
-        if modelformat.get_param(params, 'flipX') != None:
+        if modelformat.get_param(params, 'flipX') is not None:
             flipX = -1.0
 
-        if modelformat.get_param(params, 'flipY') != None:
+        if modelformat.get_param(params, 'flipY') is not None:
             flipY = -1.0
 
-        if modelformat.get_param(params, 'flipZ') != None:
+        if modelformat.get_param(params, 'flipZ') is not None:
             flipZ = -1.0
 
         flipOrder = (flipX * flipY * flipZ) < 0
@@ -114,13 +115,13 @@ class ObjFormat(modelformat.ModelFormat):
         flipY = 1.0
         flipZ = 1.0
 
-        if modelformat.get_param(params, 'flipX') != None:
+        if modelformat.get_param(params, 'flipX') is not None:
             flipX = -1.0
 
-        if modelformat.get_param(params, 'flipY') != None:
+        if modelformat.get_param(params, 'flipY') is not None:
             flipY = -1.0
 
-        if modelformat.get_param(params, 'flipZ') != None:
+        if modelformat.get_param(params, 'flipZ') is not None:
             flipZ = -1.0
 
         flipOrder = (flipX * flipY * flipZ) < 0

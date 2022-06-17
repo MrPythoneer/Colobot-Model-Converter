@@ -2,7 +2,7 @@
 # Contains implementation of COLLADA .dae model format
 # Copyright (c) 2015 Tomasz Kapu�ci�ski
 
-import modelformat
+from modelformats import modelformat
 import geometry
 from xml.dom import minidom
 

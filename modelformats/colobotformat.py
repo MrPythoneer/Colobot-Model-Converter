@@ -2,7 +2,7 @@
 # Implements Colobot model formats
 # Copyright (c) 2014 Tomasz Kapuściński
 
-import modelformat
+from modelformats import modelformat
 import geometry
 import struct
 
