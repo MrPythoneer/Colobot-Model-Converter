@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # Colobot Model Converter
 # Version 1.6
 # Copyright (c) 2014 Tomasz Kapuściński
@@ -32,13 +32,13 @@ while i < n:
 
     if arg == '-i':
         in_filename = sys.argv[i+1]
-        i = i + 2
+        i += 2
     elif arg == '-if':
         in_format = sys.argv[i+1]
-        i = i + 2
+        i += 2
     elif arg == '-id':
         in_params['directory'] = sys.argv[i+1]
-        i = i + 2
+        i += 2
     elif arg == '-ip':
         text = sys.argv[i+1]
 
@@ -48,16 +48,16 @@ while i < n:
         else:
             in_params[text] = 'none'
 
-        i = i + 2
+        i += 2
     elif arg == '-o':
         out_filename = sys.argv[i+1]
-        i = i + 2
+        i += 2
     elif arg == '-of':
         out_format = sys.argv[i+1]
-        i = i + 2
+        i += 2
     elif arg == '-od':
         out_params['directory'] = sys.argv[i+1]
-        i = i + 2
+        i += 2
     elif arg == '-op':
         text = sys.argv[i+1]
 
@@ -67,23 +67,25 @@ while i < n:
         else:
             out_params[text] = 'none'
 
-        i = i + 2
+        i += 2
     elif arg == '-batch':
         batch_mode = True
-        i = i + 1
+        i += 1
     elif arg == '-add':
         file_list.append(sys.argv[i+1])
-        i = i + 2
+        i += 2
     elif arg == '-addlist':
         listfile = open(sys.argv[i+1], 'r')
 
         for line in listfile.readlines():
-            if len(line) == 0: continue
-            if line[-1] == '\n': line = line[:-1]
+            if len(line) == 0:
+                continue
+            if line[-1] == '\n':
+                line = line[:-1]
             file_list.append(line)
 
-        listfile.close();
-        i = i + 2
+        listfile.close()
+        i += 2
     elif arg == '-f':
         modelformat.print_formats()
         exit()
@@ -97,6 +99,8 @@ while i < n:
 # convert file
 
 if batch_mode:
-    modelformat.convert_list(file_list, in_format, in_params, out_format, out_params)
+    modelformat.convert_list(file_list, in_format,
+                             in_params, out_format, out_params)
 else:
-    modelformat.convert(in_format, in_filename, in_params, out_format, out_filename, out_params)
+    modelformat.convert(in_format, in_filename, in_params,
+                        out_format, out_filename, out_params)

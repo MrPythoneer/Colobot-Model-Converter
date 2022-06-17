@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # Contains implementation of Wavefront .OBJ importer
 # Copyright (c) 2014 Tomasz Kapuściński
 
@@ -6,19 +6,22 @@ import re
 import modelformat
 import geometry
 
+
 class ObjFormat(modelformat.ModelFormat):
+    description: str
+
     def __init__(self):
         self.description = 'Wavefront .OBJ format'
-        
-    def get_extension(self):
+
+    def get_extension(self) -> str:
         return 'obj'
-    
-    def read(self, filename, model, params):
+
+    def read(self, filename: str, model: geometry.Model, params: dict[str, str]) -> bool:
         # lists with parsed vertex attributes
-        vertex_coords = []
-        tex_coords = []
-        normals = []
-        materials = {}
+        vertex_coords: list[geometry.VertexCoord] = []
+        tex_coords: list[geometry.TexCoord] = []
+        normals: list[geometry.Normal] = []
+        materials: list[geometry.Material] = {}
 
         # read file
         input_file = open(filename, 'r')
@@ -27,10 +30,15 @@ class ObjFormat(modelformat.ModelFormat):
         flipY = 1.0
         flipZ = 1.0
 
-        if modelformat.get_param(params, 'flipX') != None: flipX = -1.0
-        if modelformat.get_param(params, 'flipY') != None: flipY = -1.0
-        if modelformat.get_param(params, 'flipZ') != None: flipZ = -1.0
-        
+        if modelformat.get_param(params, 'flipX') != None:
+            flipX = -1.0
+
+        if modelformat.get_param(params, 'flipY') != None:
+            flipY = -1.0
+
+        if modelformat.get_param(params, 'flipZ') != None:
+            flipZ = -1.0
+
         flipOrder = (flipX * flipY * flipZ) < 0
 
         # parse lines
@@ -65,13 +73,14 @@ class ObjFormat(modelformat.ModelFormat):
 
                     vert_coord = vertex_coords[int(elements[0]) - 1]
                     normal = normals[int(elements[2]) - 1]
-                    
+
                     if elements[1] == '':
                         tex_coord = geometry.TexCoord(0.0, 0.0)
                     else:
                         tex_coord = tex_coords[int(elements[1]) - 1]
 
-                    polygon.append(geometry.Vertex(vert_coord, normal, tex_coord))
+                    polygon.append(geometry.Vertex(
+                        vert_coord, normal, tex_coord))
 
                 # triangulate polygon
                 new_triangles = geometry.triangulate(polygon, flipOrder)
@@ -82,11 +91,10 @@ class ObjFormat(modelformat.ModelFormat):
                     model.triangles.append(triangle)
 
         input_file.close()
-        
+
         return True
-    
-    
-    def write(self, filename, model, params):
+
+    def write(self, filename: str, model: geometry.Model, params: dict[str, str]) -> bool:
         model_file = open(filename, 'w')
         materials_filename = filename
 
@@ -94,30 +102,34 @@ class ObjFormat(modelformat.ModelFormat):
             materials_filename = materials_filename.replace('.obj', '.mtl')
 
         materials_file = open(materials_filename, 'w')
-        
-        materials = []
-        vertex_coords = []
-        tex_coords = []
-        normals = []
 
-        faces = []
+        materials: list[geometry.Material] = []
+        vertex_coords: list[geometry.VertexCoord] = []
+        tex_coords: list[geometry.TexCoord] = []
+        normals: list[geometry.Normal] = []
+
+        faces: list[list[int, str]] = []
 
         flipX = 1.0
         flipY = 1.0
         flipZ = 1.0
 
-        if modelformat.get_param(params, 'flipX') != None: flipX = -1.0
-        if modelformat.get_param(params, 'flipY') != None: flipY = -1.0
-        if modelformat.get_param(params, 'flipZ') != None: flipZ = -1.0
-        
+        if modelformat.get_param(params, 'flipX') != None:
+            flipX = -1.0
+
+        if modelformat.get_param(params, 'flipY') != None:
+            flipY = -1.0
+
+        if modelformat.get_param(params, 'flipZ') != None:
+            flipZ = -1.0
+
         flipOrder = (flipX * flipY * flipZ) < 0
 
         materials_file.write('# Materials\n')
 
         for triangle in model.triangles:
+            mat = triangle.material
 
-            mat = triangle.material    
-            
             if triangle.material not in materials:
                 materials.append(mat)
 
@@ -126,14 +138,17 @@ class ObjFormat(modelformat.ModelFormat):
                 mat.name = name
                 materials_file.write('\n')
                 materials_file.write('newmtl {}\n'.format(name))
-                
+
                 if mat.texture != '':
                     materials_file.write('map_Kd {}\n'.format(mat.texture))
-                
+
                 materials_file.write('Ns 96.078431\n')
-                materials_file.write('Ka {} {} {}\n'.format(mat.ambient[0], mat.ambient[1], mat.ambient[2]))
-                materials_file.write('Kd {} {} {}\n'.format(mat.diffuse[0], mat.diffuse[1], mat.diffuse[2]))
-                materials_file.write('Ks {} {} {}\n'.format(mat.specular[0], mat.specular[1], mat.specular[2]))
+                materials_file.write('Ka {} {} {}\n'.format(
+                    mat.ambient[0], mat.ambient[1], mat.ambient[2]))
+                materials_file.write('Kd {} {} {}\n'.format(
+                    mat.diffuse[0], mat.diffuse[1], mat.diffuse[2]))
+                materials_file.write('Ks {} {} {}\n'.format(
+                    mat.specular[0], mat.specular[1], mat.specular[2]))
                 materials_file.write('Ni 1.000000\n')
                 materials_file.write('d 1.000000\n')
                 materials_file.write('illum 2\n')
@@ -142,10 +157,11 @@ class ObjFormat(modelformat.ModelFormat):
                     if mat == mater:
                         mat = mater
 
-            face = []
-            
+            face: list[list[int, str]] = []
+
             for vertex in triangle.vertices:
-                vertex_coord = geometry.VertexCoord(vertex.x, vertex.y, vertex.z)
+                vertex_coord = geometry.VertexCoord(
+                    vertex.x, vertex.y, vertex.z)
                 tex_coord = geometry.TexCoord(vertex.u1, vertex.v1)
                 normal = geometry.Normal(vertex.nx, vertex.ny, vertex.nz)
 
@@ -186,7 +202,8 @@ class ObjFormat(modelformat.ModelFormat):
                     if mat == triangle.material:
                         mat_name = mat.name
 
-                vertex_indices = [ vertex_coord_index + 1, tex_coord_index + 1, normal_index + 1, mat_name ]
+                vertex_indices = [vertex_coord_index + 1,
+                                  tex_coord_index + 1, normal_index + 1, mat_name]
 
                 face.append(vertex_indices)
 
@@ -194,7 +211,7 @@ class ObjFormat(modelformat.ModelFormat):
 
         # write vertex coordinates
         model_file.write('mtllib {}\n'.format(materials_filename))
-        
+
         for v in vertex_coords:
             model_file.write('v {} {} {}\n'.format(flipX * v.x, flipY * v.y, flipZ * v.z))
 
@@ -230,7 +247,7 @@ class ObjFormat(modelformat.ModelFormat):
 
         model_file.close()
         materials_file.close()
-        
+
         return True
 
 
@@ -243,8 +260,10 @@ modelformat.register_extension('obj', 'obj')
 state_pattern = re.compile(r'^.+(\[(.+?)\])$')
 
 # reads Wavefront .MTL material file
-def read_mtl_file(filename):
-    materials = {}
+
+
+def read_mtl_file(filename: str) -> list[geometry.Material]:
+    materials: list[geometry.Material] = {}
 
     input_file = open(filename, 'r')
 
