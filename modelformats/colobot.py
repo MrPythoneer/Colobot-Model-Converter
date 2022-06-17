@@ -7,10 +7,7 @@ import modelformats
 
 
 class ColobotNewTextFormat(modelformats.ModelFormat):
-    description: str
-
-    def __init__(self):
-        self.description = 'Colobot New Text format'
+    description: str = 'Colobot New Text format'
 
     def get_extension(self) -> str:
         return 'txt'

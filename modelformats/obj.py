@@ -9,10 +9,7 @@ import geometry
 
 
 class ObjFormat(modelformats.ModelFormat):
-    description: str
-
-    def __init__(self):
-        self.description = 'Wavefront .OBJ format'
+    description: str = 'Wavefront .OBJ format'
 
     def get_extension(self) -> str:
         return 'obj'

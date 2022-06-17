@@ -8,8 +8,7 @@ from xml.dom import minidom
 
 
 class COLLADAFormat(ModelFormat):
-    def __init__(self):
-        self.description = 'COLLADA .dae format'
+    description: str = 'COLLADA .dae format'
 
     def get_extension(self) -> str:
         return 'dae'

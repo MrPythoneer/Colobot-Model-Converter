@@ -4,8 +4,7 @@ import geometry
 from modelformats import ModelFormat, register_format, register_extension
 
 class ColobotOldFormat(ModelFormat):
-    def __init__(self):
-        self.description = 'Colobot Old Binary format'
+    description: str = 'Colobot Old Binary format'
 
     def get_extension(self):
         return 'mod'
