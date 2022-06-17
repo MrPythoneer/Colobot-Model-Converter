@@ -69,7 +69,7 @@ class ColobotOldFormat(ModelFormat):
 
             for i in range(20):
                 if chars[i] == '\0':
-                    mat.texture = struct.unpack('={}s'.format(i), chars[:i])[0]
+                    mat.texture1 = struct.unpack('={}s'.format(i), chars[:i])[0]
                     break
 
             values = struct.unpack('=ffiHHHH', input_file.read(20))
@@ -144,10 +144,10 @@ class ColobotOldFormat(ModelFormat):
             output_file.write(struct.pack('=f', 0.0))
 
             # texture name
-            output_file.write(mat.texture.encode('utf-8'))
+            output_file.write(mat.texture1.encode('utf-8'))
 
             # texture name padding
-            for i in range(20 - len(mat.texture)):
+            for i in range(20 - len(mat.texture1)):
                 output_file.write(struct.pack('=x'))
 
             dirt = 0

@@ -2,8 +2,7 @@
 # Implements Colobot geometry specification
 # Copyright (c) 2014 Tomasz Kapuściński
 
-from geometry.vertxcoord import VertexCoord
-from geometry.normal import Normal
+from geometry.vector3d import Vector3D
 from geometry.texcoord import TexCoord
 
 
@@ -20,8 +19,8 @@ class Vertex:
     v2: float
 
     def __init__(self,
-                 vertex: VertexCoord = VertexCoord(0, 0, 0),
-                 normal: Normal = Normal(0, 0, 0),
+                 vertex: Vector3D = Vector3D(0, 0, 0),
+                 normal: Vector3D = Vector3D(0, 0, 0),
                  tex1: TexCoord = TexCoord(0.0, 0.0),
                  tex2: TexCoord = TexCoord(0.0, 0.0)
                  ):

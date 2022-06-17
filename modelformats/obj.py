@@ -140,8 +140,8 @@ class ObjFormat(modelformats.ModelFormat):
                 materials_file.write('\n')
                 materials_file.write('newmtl {}\n'.format(name))
 
-                if mat.texture != '':
-                    materials_file.write('map_Kd {}\n'.format(mat.texture))
+                if mat.texture1 != '':
+                    materials_file.write('map_Kd {}\n'.format(mat.texture1))
 
                 materials_file.write('Ns 96.078431\n')
                 materials_file.write('Ka {} {} {}\n'.format(
@@ -292,7 +292,7 @@ def read_mtl_file(filename: str) -> list[geometry.Material]:
             for i in range(3):
                 current_material.specular[i] = float(parts[i+1])
         elif parts[0] == 'map_Kd':
-            current_material.texture = parts[1]
+            current_material.texture1 = parts[1]
 
     input_file.close()
 

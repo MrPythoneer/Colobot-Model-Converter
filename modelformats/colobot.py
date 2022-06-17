@@ -52,7 +52,7 @@ class ColobotNewTextFormat(modelformats.ModelFormat):
             elif cmd == 'mat':
                 triangle.material = modelformats.parse_material(values)
             elif cmd == 'tex1':
-                triangle.material.texture = values[1]
+                triangle.material.texture1 = values[1]
             elif cmd == 'tex2':
                 triangle.material.texture2 = values[1]
             elif cmd == 'var_tex2':
@@ -126,7 +126,7 @@ class ColobotNewTextFormat(modelformats.ModelFormat):
                 mat.ambient[0], mat.ambient[1], mat.ambient[2], mat.ambient[3]))
             output_file.write(' spc {} {} {} {}\n'.format(
                 mat.specular[0], mat.specular[1], mat.specular[2], mat.specular[3]))
-            output_file.write('tex1 {}\n'.format(mat.texture))
+            output_file.write('tex1 {}\n'.format(mat.texture1))
             output_file.write('tex2 {}\n'.format(dirt_texture))
             output_file.write('var_tex2 {}\n'.format(dirt))
 

@@ -1,13 +1,21 @@
+# -*- coding: utf-8 -*-
+# Implements Colobot geometry specification
+# Copyright (c) 2014 Tomasz Kapuściński
+
+
 from geometry.material import Material
 from geometry.model import Model
-from geometry.normal import Normal
 from geometry.texcoord import TexCoord
 from geometry.triangle import Triangle
+from geometry.vector3d import Vector3D
 from geometry.vertex import Vertex
-from geometry.vertxcoord import VertexCoord
 
-# triangulates polygon
-def triangulate(vertices: list[Vertex], flipOrder: bool = False) -> list[Triangle]:
+Normal = Vector3D
+VertexCoord = Vector3D
+
+
+def triangulate(vertices: list[Vertex], flip_order: bool = False) -> list[Triangle]:
+    """Triangulates polygon"""
     result: list[Triangle] = []
 
     first = vertices[0]
@@ -22,7 +30,7 @@ def triangulate(vertices: list[Vertex], flipOrder: bool = False) -> list[Triangl
         triangle = Triangle()
 
         # reverses order
-        if flipOrder:
+        if flip_order:
             temp = second
             second = third
             third = temp
@@ -36,20 +44,19 @@ def triangulate(vertices: list[Vertex], flipOrder: bool = False) -> list[Triangl
     return result
 
 
-# encodes state to number
 def encode_state(state: str) -> int:
+    """Encodes state to number"""
     result = 0
 
-    for value in state.split(','):
-        if value in state_to_number:
-            value = state_to_number[value]
-        result |= int(value)
+    for s in state.split(','):
+        value = state_to_number.get(s, int(s))
+        result |= value
 
     return result
 
 
-# decodes state from number
 def decode_state(state: int) -> str:
+    """Decodes state from number"""
     labels: list[str] = []
 
     if state != 0:

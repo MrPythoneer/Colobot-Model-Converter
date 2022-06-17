@@ -34,7 +34,7 @@ class COLLADAFormat(ModelFormat):
             # if effect.getAttribute('id') == material_id:
             # effect_xml = effect
 
-            material.texture = params['texture']
+            material.texture1 = params['texture']
 
             # end of material definition
             materials[material_name] = material
