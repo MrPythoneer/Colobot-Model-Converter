@@ -75,8 +75,7 @@ class ObjFormat(modelformats.ModelFormat):
                     else:
                         tex_coord = tex_coords[int(elements[1]) - 1]
 
-                    polygon.append(geometry.Vertex(
-                        vert_coord, normal, tex_coord))
+                    polygon.append(geometry.Vertex(vert_coord, normal, tex_coord))
 
                 # triangulate polygon
                 new_triangles = geometry.triangulate(polygon, flipOrder)
@@ -156,9 +155,9 @@ class ObjFormat(modelformats.ModelFormat):
             face: list[list[int, str]] = []
 
             for vertex in triangle.vertices:
-                vertex_coord = geometry.VertexCoord(vertex.x, vertex.y, vertex.z)
-                tex_coord = geometry.TexCoord(vertex.u1, vertex.v1)
-                normal = geometry.Normal(vertex.nx, vertex.ny, vertex.nz)
+                vertex_coord = geometry.VertexCoord(*vertex.vertex)
+                tex_coord = geometry.TexCoord(*vertex.tex1)
+                normal = geometry.Normal(*vertex.normal)
 
                 # looking for vertex coordinate
                 vertex_coord_index = -1
