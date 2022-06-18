@@ -1,6 +1,8 @@
 import struct
 
 import geometry
+from geometry.texcoord import TexCoord
+from geometry.vector3d import Vector3D
 from modelformats import ModelFormat, register_format, register_extension
 
 class ColobotOldFormat(ModelFormat):
@@ -8,7 +10,7 @@ class ColobotOldFormat(ModelFormat):
     ext: str = 'mod'
 
     def read(self, filename, model, params):
-        input_file = open(filename, 'rb', encoding='utf8')
+        input_file = open(filename, 'rb')
 
         # read header
         version_major = struct.unpack('=i', input_file.read(4))[0]
@@ -33,25 +35,15 @@ class ColobotOldFormat(ModelFormat):
 
             for vertex in triangle.vertices:
                 # position, normal, uvs
-                floats = struct.unpack('=ffffffffff', input_file.read(40))
+                floats = struct.unpack('=ffffffffff', input_file.read(4 * 10))
 
-                vertex.x = floats[0]
-                vertex.y = floats[1]
-                vertex.z = floats[2]
-
-                vertex.nx = floats[3]
-                vertex.ny = floats[4]
-                vertex.nz = floats[5]
-
-                vertex.u1 = floats[6]
-                vertex.v1 = floats[7]
-
-                vertex.u2 = floats[8]
-                vertex.v2 = floats[9]
+                vertex.coord = Vector3D(*floats[0:3])
+                vertex.normal = Vector3D(*floats[3:6])
+                vertex.tex1 = TexCoord(*floats[6:8])
+                vertex.tex2 = TexCoord(*floats[8:10])
 
             # material colors
-            floats = struct.unpack('=fffffffffffffffff',
-                                   input_file.read(17 * 4))
+            floats = struct.unpack('=fffffffffffffffff', input_file.read(4 * 17))
 
             mat = triangle.material
 
@@ -96,7 +88,7 @@ class ColobotOldFormat(ModelFormat):
         return True
 
     def write(self, filename, model, params):
-        output_file = open(filename, 'wb', encoding='utf8')
+        output_file = open(filename, 'wb')
 
         # write header
         output_file.write(b'\x01\x00\x00\x00'                      # version major
@@ -114,10 +106,10 @@ class ColobotOldFormat(ModelFormat):
 
             # write vertices
             for vertex in triangle.vertices:
-                output_file.write(struct.pack('=fff', vertex.x, vertex.y, vertex.z))       # vertex coord
-                output_file.write(struct.pack('=fff', vertex.nx, vertex.ny, vertex.nz))    # normal
-                output_file.write(struct.pack('=ff', vertex.u1, vertex.v1))                # tex coord 1
-                output_file.write(struct.pack('=ff', vertex.u2, vertex.v2))                # tex coord 2
+                output_file.write(struct.pack('=fff', *vertex.coord))       # vertex coord
+                output_file.write(struct.pack('=fff', *vertex.normal))    # normal
+                output_file.write(struct.pack('=ff', *vertex.tex1))                # tex coord 1
+                output_file.write(struct.pack('=ff', *vertex.tex2))                # tex coord 2
 
             # material info
             mat = triangle.material

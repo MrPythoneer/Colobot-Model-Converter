@@ -11,6 +11,7 @@ import modelformats
 import modelformats.defaultmodel
 import modelformats.obj
 import modelformats.colobot
+import modelformats.colobotold
 
 # parse arguments
 i = 1

@@ -104,10 +104,7 @@ class ColobotNewTextFormat(modelformats.ModelFormat):
                     ' n %f %f %f'
                     ' t1 %f %f'
                     ' t2 %f %f\n'
-                    % (i+1, vertex.x, vertex.y, vertex.z,
-                       vertex.nx, vertex.ny, vertex.nz,
-                       vertex.u1, vertex.v1,
-                       vertex.u2, vertex.v2))
+                    % (i+1, *vertex.coord, *vertex.normal, *vertex.tex1, *vertex.tex2))
 
             mat = triangle.material
 

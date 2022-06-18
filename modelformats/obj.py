@@ -155,7 +155,7 @@ class ObjFormat(modelformats.ModelFormat):
             face: list[list[int, str]] = []
 
             for vertex in triangle.vertices:
-                vertex_coord = geometry.VertexCoord(*vertex.vertex)
+                vertex_coord = geometry.VertexCoord(*vertex.coord)
                 tex_coord = geometry.TexCoord(*vertex.tex1)
                 normal = geometry.Normal(*vertex.normal)
 

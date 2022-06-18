@@ -10,7 +10,7 @@ from geometry.texcoord import TexCoord
 
 @dataclass(slots=True)
 class Vertex:
-    vertex: Vector3D = Vector3D(0, 0, 0)
+    coord: Vector3D = Vector3D(0, 0, 0)
     normal: Vector3D = Vector3D(0, 0, 0)
     tex1: TexCoord = TexCoord(0.0, 0.0)
     tex2: TexCoord = TexCoord(0.0, 0.0)
