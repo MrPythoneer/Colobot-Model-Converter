@@ -31,9 +31,7 @@ def triangulate(vertices: list[Vertex], flip_order: bool = False) -> list[Triang
 
         # reverses order
         if flip_order:
-            temp = second
-            second = third
-            third = temp
+            second, third = third, second
 
         triangle.vertices[0] = first
         triangle.vertices[1] = second
@@ -48,8 +46,8 @@ def encode_state(state: str) -> int:
     """Encodes state to number"""
     result = 0
 
-    for s in state.split(','):
-        value = state_to_number.get(s, int(s))
+    for st in state.split(','):
+        value = state_to_number.get(st, 0)
         result |= value
 
     return result
