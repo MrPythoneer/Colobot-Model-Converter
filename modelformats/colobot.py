@@ -20,7 +20,7 @@ class ColobotNewTextFormat(modelformats.ModelFormat):
             line = input_file.readline()
 
             # eof
-            if len(line) == 0:
+            if not line:
                 break
 
             # comments are ignored
@@ -28,8 +28,8 @@ class ColobotNewTextFormat(modelformats.ModelFormat):
                 continue
 
             # remove eol
-            if line[len(line)-1] == '\n':
-                line = line[:len(line)-1]
+            if line[-1] == '\n':
+                line = line[:-1]
 
             values = line.split(' ')
             cmd = values[0]

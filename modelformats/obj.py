@@ -22,20 +22,20 @@ class ObjFormat(modelformats.ModelFormat):
         # read file
         input_file = open(filename, 'r', encoding='utf8')
 
-        flipX = 1.0
-        flipY = 1.0
-        flipZ = 1.0
+        flip_x = 1.0
+        flip_y = 1.0
+        flip_z = 1.0
 
         if modelformats.get_param(params, 'flipX') is not None:
-            flipX = -1.0
+            flip_x = -1.0
 
         if modelformats.get_param(params, 'flipY') is not None:
-            flipY = -1.0
+            flip_y = -1.0
 
         if modelformats.get_param(params, 'flipZ') is not None:
-            flipZ = -1.0
+            flip_z = -1.0
 
-        flipOrder = (flipX * flipY * flipZ) < 0
+        flip_order = (flip_x * flip_y * flip_z) < 0
 
         # parse lines
         while True:
@@ -53,11 +53,11 @@ class ObjFormat(modelformats.ModelFormat):
                 name = parts[1]
                 materials = read_mtl_file(name)
             elif parts[0] == 'v':
-                vertex_coords.append(geometry.VertexCoord(flipX * float(parts[1]), flipY * float(parts[2]), flipZ * float(parts[3])))
+                vertex_coords.append(geometry.VertexCoord(flip_x * float(parts[1]), flip_y * float(parts[2]), flip_z * float(parts[3])))
             elif parts[0] == 'vt':
                 tex_coords.append(geometry.TexCoord(float(parts[1]), 1 - float(parts[2])))
             elif parts[0] == 'vn':
-                normals.append(geometry.Normal(flipX * float(parts[1]), flipY * float(parts[2]), flipZ * float(parts[3])))
+                normals.append(geometry.Normal(flip_x * float(parts[1]), flip_y * float(parts[2]), flip_z * float(parts[3])))
             elif parts[0] == 'usemtl':
                 current_material = materials[parts[1]]
             elif parts[0] == 'f':
@@ -78,7 +78,7 @@ class ObjFormat(modelformats.ModelFormat):
                     polygon.append(geometry.Vertex(vert_coord, normal, tex_coord))
 
                 # triangulate polygon
-                new_triangles = geometry.triangulate(polygon, flipOrder)
+                new_triangles = geometry.triangulate(polygon, flip_order)
 
                 # save vertices
                 for triangle in new_triangles:
