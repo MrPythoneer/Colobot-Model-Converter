@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 
 @dataclass(slots=True)
 class Material:
-    name: str = ""
+    name: str = ''
     texture1: str = ''
     texture2: str = ''
     ambient: list[float] = field(default_factory=lambda: [0.0, 0.0, 0.0, 0.0])
