@@ -22,13 +22,13 @@ class DefaultModelFormat(ModelFormat):
 
     def write(self, filename: str, model: geometry.Model, params: dict[str, str]) -> bool:
         ext = get_extension(filename)
-        format = get_format_by_extension(ext)
+        fmt = get_format_by_extension(ext)
 
-        if format is None:
+        if fmt is None:
             print(f'Unknown default format. File {filename} cannot be processed.')
             return False
 
-        return format.write(filename, model, params)
+        return fmt.write(filename, model, params)
 
 
 register_format('default', DefaultModelFormat())

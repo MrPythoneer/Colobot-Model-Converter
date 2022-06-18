@@ -101,8 +101,8 @@ class ColobotOldFormat(ModelFormat):
         output_file = open(filename, 'wb')
 
         # write header
-        output_file.write(b'\x01\x00\x00\x00')                      # version major
-        output_file.write(b'\x02\x00\x00\x00')                      # version minor
+        output_file.write(b'\x01\x00\x00\x00'                      # version major
+                          b'\x02\x00\x00\x00')                      # version minor
         output_file.write(struct.pack('i', len(model.triangles)))   # total triangles
 
         # padding
@@ -110,9 +110,9 @@ class ColobotOldFormat(ModelFormat):
 
         # triangles
         for triangle in model.triangles:
-            output_file.write(b'\x01')       # used
-            output_file.write(b'\x00')       # selected ?
-            output_file.write(b'\x00\x00')   # padding (2 bytes)
+            output_file.write(b'\x01'       # used
+                              b'\x00'       # selected ?
+                              b'\x00\x00')   # padding (2 bytes)
 
             # write vertices
             for vertex in triangle.vertices:
@@ -126,8 +126,7 @@ class ColobotOldFormat(ModelFormat):
             output_file.write(struct.pack('=ffff', *mat.diffuse))        # diffuse color
             output_file.write(struct.pack('=ffff', *mat.ambient))        # ambient color
             output_file.write(struct.pack('=ffff', *mat.specular))       # specular color
-            output_file.write(b'\x00' * 16)                              # emissive color
-            output_file.write(b'\x00' * 4)                               # power
+            output_file.write(b'\x00' * 20)                              # emissive color and power
 
             # texture name
             output_file.write(mat.texture1.encode('utf-8'))
