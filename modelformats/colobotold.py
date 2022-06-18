@@ -96,7 +96,7 @@ class ColobotOldFormat(ModelFormat):
         return True
 
     def write(self, filename, model, params):
-        output_file = open(filename, 'wb')
+        output_file = open(filename, 'wb', encoding='utf8')
 
         # write header
         output_file.write(b'\x01\x00\x00\x00'                      # version major

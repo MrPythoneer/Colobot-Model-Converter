@@ -20,7 +20,7 @@ class ObjFormat(modelformats.ModelFormat):
         materials: list[geometry.Material] = {}
 
         # read file
-        input_file = open(filename, 'r')
+        input_file = open(filename, 'r', encoding='utf8')
 
         flipX = 1.0
         flipY = 1.0
@@ -256,7 +256,7 @@ state_pattern = re.compile(r'^.+(\[(.+?)\])$')
 def read_mtl_file(filename: str) -> list[geometry.Material]:
     materials: list[geometry.Material] = {}
 
-    input_file = open(filename, 'r')
+    input_file = open(filename, 'r', encoding='utf8')
 
     while True:
         line = input_file.readline()
