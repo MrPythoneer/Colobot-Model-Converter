@@ -9,3 +9,6 @@ from dataclasses import dataclass
 class TexCoord:
     u: float
     v: float
+
+    def __iter__(self):
+        return iter((self.u, self.v))
