@@ -93,13 +93,13 @@ class ObjFormat(modelformats.ModelFormat):
         return True
 
     def write(self, filename: str, model: geometry.Model, params: dict[str, str]) -> bool:
-        model_file = open(filename, 'w')
+        model_file = open(filename, 'w', encoding='utf8')
         materials_filename = filename
 
         if materials_filename.find('.obj'):
             materials_filename = materials_filename.replace('.obj', '.mtl')
 
-        materials_file = open(materials_filename, 'w')
+        materials_file = open(materials_filename, 'w', encoding='utf8')
 
         materials: list[geometry.Material] = []
         vertex_coords: list[geometry.VertexCoord] = []

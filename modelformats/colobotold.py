@@ -10,7 +10,7 @@ class ColobotOldFormat(ModelFormat):
         return 'mod'
 
     def read(self, filename, model, params):
-        input_file = open(filename, 'rb')
+        input_file = open(filename, 'rb', encoding='utf8')
 
         # read header
         version_major = struct.unpack('=i', input_file.read(4))[0]

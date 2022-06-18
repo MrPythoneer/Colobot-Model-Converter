@@ -48,8 +48,8 @@ def read(fmt: str, filename: str, model: geometry.Model, params: dict[str, str])
     if model_format is None:
         print('Unknown format: ' + fmt)
         return False
-    else:
-        return model_format.read(filename, model, params)
+        
+    return model_format.read(filename, model, params)
 
 
 def write(fmt: str, filename: str, model: geometry.Model, params: dict[str, str]) -> bool:
@@ -98,11 +98,11 @@ def convert_list(file_list: list[str], in_format: str, in_params: dict[str, str]
     out_modelformat = get_format(out_format)
 
     if in_modelformat is None:
-        print('Unknown input format: ' + in_format)
+        print(f'Unknown input format: {in_format}')
         return
 
     if out_modelformat is None:
-        print('Unknown output format: ' + out_format)
+        print(f'Unknown output format: {out_format}')
         return
 
     in_directory = ''
@@ -134,7 +134,7 @@ def convert_list(file_list: list[str], in_format: str, in_params: dict[str, str]
                 continue
 
             in_filename = pair
-            out_filename = filename_part + '.' + extension
+            out_filename = f'{filename_part}.{extension}'
 
         # append directory path
         in_filename = in_directory + in_filename
@@ -146,21 +146,21 @@ def convert_list(file_list: list[str], in_format: str, in_params: dict[str, str]
         in_modelformat.read(in_filename, model, in_params)
         out_modelformat.write(out_filename, model, out_params)
 
-        print('{in_filename} -> {out_filename}')
+        print(f'{in_filename} -> {out_filename}')
 
     if len(file_list) == 0:
         print('Batch list empty. No files converted.')
 
 
 def print_formats():
-    for format in formats.keys():
-        print('{:<16}{}'.format(format, formats[format].description))
+    for fmt in formats.keys():
+        print('{:<16}{}'.format(fmt, formats[fmt].description))
 
 
 def print_extensions():
     for ext in extensions.keys():
-        format = extensions[ext]
-        desc = formats[format].description
+        fmt = extensions[ext]
+        desc = formats[fmt].description
 
         print('{:<8}{}'.format(ext, desc))
 

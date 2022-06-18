@@ -75,7 +75,7 @@ while i < n:
         file_list.append(sys.argv[i+1])
         i += 2
     elif arg == '-addlist':
-        listfile = open(sys.argv[i+1], 'r')
+        listfile = open(sys.argv[i+1], 'r', encoding='utf8')
 
         for line in listfile.readlines():
             if len(line) == 0:

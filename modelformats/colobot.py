@@ -13,7 +13,7 @@ class ColobotNewTextFormat(modelformats.ModelFormat):
         return 'txt'
 
     def read(self, filename: str, model: geometry.Model, params: dict[str, str]) -> bool:
-        input_file = open(filename, 'r')
+        input_file = open(filename, 'r', encoding='utf8')
 
         triangle = geometry.Triangle()
         materials: list[geometry.Material] = []
@@ -79,7 +79,7 @@ class ColobotNewTextFormat(modelformats.ModelFormat):
         return True
 
     def write(self, filename: str, model: geometry.Model, params: dict[str, str]) -> bool:
-        output_file = open(filename, 'w')
+        output_file = open(filename, 'w', encoding='utf8')
 
         version = 2
 
