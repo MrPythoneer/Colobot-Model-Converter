@@ -131,25 +131,25 @@ class ObjFormat(modelformats.ModelFormat):
             if triangle.material not in materials:
                 materials.append(mat)
 
-                name = 'Material_{}_[{}]'.format(len(materials), geometry.decode_state(mat.state))
+                name = 'Material_%d_[%s]' % (len(materials), geometry.decode_state(mat.state))
 
                 mat.name = name
-                materials_file.write('\n')
-                materials_file.write('newmtl {}\n'.format(name))
+                materials_file.write('\nnewmtl %s\n' % name)
 
                 if mat.texture1 != '':
-                    materials_file.write('map_Kd {}\n'.format(mat.texture1))
+                    materials_file.write('map_Kd %s\n' % mat.texture1)
 
-                materials_file.write('Ns 96.078431\n')
-                materials_file.write('Ka {} {} {}\n'.format(
-                    mat.ambient[0], mat.ambient[1], mat.ambient[2]))
-                materials_file.write('Kd {} {} {}\n'.format(
-                    mat.diffuse[0], mat.diffuse[1], mat.diffuse[2]))
-                materials_file.write('Ks {} {} {}\n'.format(
-                    mat.specular[0], mat.specular[1], mat.specular[2]))
-                materials_file.write('Ni 1.000000\n')
-                materials_file.write('d 1.000000\n')
-                materials_file.write('illum 2\n')
+                materials_file.write(
+                    'Ns 96.078431\n'
+                    'Ka %f %f %f\n'
+                    'Kd %f %f %f\n'
+                    'Ks %f %f %f\n'
+                    'Ni 1.000000\n'
+                    'd 1.000000\n'
+                    'illum 2\n' 
+                    % (*mat.ambient[:3], *mat.diffuse[:3], *mat.specular[:3])
+                )
+
             else:
                 for mater in materials:
                     if mat == mater:
@@ -158,8 +158,7 @@ class ObjFormat(modelformats.ModelFormat):
             face: list[list[int, str]] = []
 
             for vertex in triangle.vertices:
-                vertex_coord = geometry.VertexCoord(
-                    vertex.x, vertex.y, vertex.z)
+                vertex_coord = geometry.VertexCoord(vertex.x, vertex.y, vertex.z)
                 tex_coord = geometry.TexCoord(vertex.u1, vertex.v1)
                 normal = geometry.Normal(vertex.nx, vertex.ny, vertex.nz)
 
@@ -200,24 +199,24 @@ class ObjFormat(modelformats.ModelFormat):
                     if mat == triangle.material:
                         mat_name = mat.name
 
-                vertex_indices = [vertex_coord_index + 1,
-                                  tex_coord_index + 1, normal_index + 1, mat_name]
+                vertex_indices = [vertex_coord_index + 1, tex_coord_index + 1, 
+                                  normal_index + 1, mat_name]
 
                 face.append(vertex_indices)
 
             faces.append(face)
 
         # write vertex coordinates
-        model_file.write('mtllib {}\n'.format(materials_filename))
+        model_file.write('mtllib %s\n' % materials_filename)
 
         for v in vertex_coords:
-            model_file.write('v {} {} {}\n'.format(flipX * v.x, flipY * v.y, flipZ * v.z))
+            model_file.write('v %f %f %f\n' % (flipX * v.x, flipY * v.y, flipZ * v.z))
 
         for t in tex_coords:
-            model_file.write('vt {} {}\n'.format(t.u, t.v))
+            model_file.write('vt %f %f\n' % (t.u, t.v))
 
         for n in normals:
-            model_file.write('vn {} {} {}\n'.format(flipX * n.x, flipY * n.y, flipZ * n.z))
+            model_file.write('vn %f %f %f\n' % (flipX * n.x, flipY * n.y, flipZ * n.z))
 
         mat_name = ''
 
@@ -228,18 +227,20 @@ class ObjFormat(modelformats.ModelFormat):
             name = f[0][3]
 
             if name != mat_name:
-                model_file.write('usemtl {}\n'.format(name))
+                model_file.write('usemtl %s\n' % name)
                 mat_name = name
 
             model_file.write('f')
 
             if flipOrder:
-                model_file.write(' {}/{}/{}'.format(f[0][0], f[0][1], f[0][2]))
-                model_file.write(' {}/{}/{}'.format(f[2][0], f[2][1], f[2][2]))
-                model_file.write(' {}/{}/{}'.format(f[1][0], f[1][1], f[1][2]))
+                model_file.write(' %d/%d/%d'
+                                 ' %d/%d/%d'
+                                 ' %d/%d/%d' 
+                                 % (*f[0], *f[2], *f[1]))
+
             else:
                 for v in f:
-                    model_file.write(' {}/{}/{}'.format(v[0], v[1], v[2]))
+                    model_file.write(' %d/%d/%d' % (*v[:3],))
 
             model_file.write('\n')
 

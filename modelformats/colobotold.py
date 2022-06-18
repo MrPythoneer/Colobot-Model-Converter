@@ -19,8 +19,7 @@ class ColobotOldFormat(ModelFormat):
         triangle_count = struct.unpack('=i', input_file.read(4))[0]
 
         if version_major != 1 or version_minor != 2:
-            print('Unsupported format version: {}.{}'.format(
-                version_major, version_minor))
+            print(f'Unsupported format version: {version_major}.{version_minor}')
             return False
 
         # read and ignore padding

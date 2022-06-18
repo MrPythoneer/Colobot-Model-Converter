@@ -87,26 +87,29 @@ class ColobotNewTextFormat(modelformats.ModelFormat):
             version = int(params['version'])
 
         # write header
-        output_file.write('# Colobot text model\n')
-        output_file.write('\n')
-        output_file.write('### HEAD\n')
-        output_file.write('version ' + str(version) + '\n')
-        output_file.write('total_triangles ' +
-                          str(len(model.triangles)) + '\n')
-        output_file.write('\n')
-        output_file.write('### TRIANGLES\n')
+        output_file.write('# Colobot text model\n'
+                          '\n'
+                          '### HEAD\n'
+                          'version %s\n'
+                          'total_triangles %d\n'
+                          '\n'
+                          '### TRIANGLES\n'
+                          % (version, len(model.triangles)))
 
         # write triangles
         for triangle in model.triangles:
             # write vertices
             for i in range(3):
                 vertex = triangle.vertices[i]
-                output_file.write('p{} c {} {} {}'.format(
-                    i+1, vertex.x, vertex.y, vertex.z))
-                output_file.write(' n {} {} {}'.format(
-                    vertex.nx, vertex.ny, vertex.nz))
-                output_file.write(' t1 {} {}'.format(vertex.u1, vertex.v1))
-                output_file.write(' t2 {} {}\n'.format(vertex.u2, vertex.v2))
+                output_file.write(
+                    'p%d c %f %f %f'
+                    ' n %f %f %f'
+                    ' t1 %f %f'
+                    ' t2 %f %f\n'
+                    % (i+1, vertex.x, vertex.y, vertex.z,
+                       vertex.nx, vertex.ny, vertex.nz,
+                       vertex.u1, vertex.v1,
+                       vertex.u2, vertex.v2))
 
             mat = triangle.material
 
@@ -117,21 +120,20 @@ class ColobotNewTextFormat(modelformats.ModelFormat):
                 dirt = 'Y'
                 dirt_texture = params['dirt']
 
-            output_file.write('mat dif {} {} {} {}'.format(
-                mat.diffuse[0], mat.diffuse[1], mat.diffuse[2], mat.diffuse[3]))
-            output_file.write(' amb {} {} {} {}'.format(
-                mat.ambient[0], mat.ambient[1], mat.ambient[2], mat.ambient[3]))
-            output_file.write(' spc {} {} {} {}\n'.format(
-                mat.specular[0], mat.specular[1], mat.specular[2], mat.specular[3]))
-            output_file.write('tex1 {}\n'.format(mat.texture1))
-            output_file.write('tex2 {}\n'.format(dirt_texture))
-            output_file.write('var_tex2 {}\n'.format(dirt))
+            output_file.write(
+                'mat dif %f %f %f %f'
+                ' amb %f %f %f %f'
+                ' spc %f %f %f %f\n'
+                'tex1 %s\n'
+                'tex2 %s\n'
+                'var_tex2 %c\n'
+                % (*mat.diffuse, *mat.ambient, *mat.specular,
+                    mat.texture1, mat.texture2, dirt))
 
             if version == 1:
                 output_file.write('lod_level 0\n')
 
-            output_file.write('state ' + str(mat.state) + '\n')
-            output_file.write('\n')
+            output_file.write('state %d\n\n' % mat.state)
 
         output_file.close()
 

@@ -15,7 +15,7 @@ class DefaultModelFormat(ModelFormat):
         format = get_format_by_extension(ext)
 
         if format is None:
-            print('Unknown default format. File ' + filename + ' cannot be processed.')
+            print(f'Unknown default format. File {filename} cannot be processed.')
             return False
 
         return format.read(filename, model, params)
@@ -25,7 +25,7 @@ class DefaultModelFormat(ModelFormat):
         format = get_format_by_extension(ext)
 
         if format is None:
-            print('Unknown default format. File ' + filename + ' cannot be processed.')
+            print(f'Unknown default format. File {filename} cannot be processed.')
             return False
 
         return format.write(filename, model, params)
