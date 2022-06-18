@@ -3,6 +3,7 @@ import geometry
 # base class for formats
 class ModelFormat:
     description: str
+    ext: str
 
     def get_extension(self) -> str:
         return None

@@ -5,9 +5,7 @@ from modelformats import ModelFormat, register_format, register_extension
 
 class ColobotOldFormat(ModelFormat):
     description: str = 'Colobot Old Binary format'
-
-    def get_extension(self):
-        return 'mod'
+    ext: str = 'mod'
 
     def read(self, filename, model, params):
         input_file = open(filename, 'rb', encoding='utf8')

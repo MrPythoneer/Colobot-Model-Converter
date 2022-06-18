@@ -9,9 +9,7 @@ from xml.dom import minidom
 
 class COLLADAFormat(ModelFormat):
     description: str = 'COLLADA .dae format'
-
-    def get_extension(self) -> str:
-        return 'dae'
+    ext: str = 'dae'
 
     def read(self, filename: str, model: geometry.Model, params: dict[str, str]) -> bool:
         xmldoc = minidom.parse(filename)

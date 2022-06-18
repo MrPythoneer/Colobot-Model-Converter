@@ -10,9 +10,7 @@ import geometry
 
 class ObjFormat(modelformats.ModelFormat):
     description: str = 'Wavefront .OBJ format'
-
-    def get_extension(self) -> str:
-        return 'obj'
+    ext: str = 'obj'
 
     def read(self, filename: str, model: geometry.Model, params: dict[str, str]) -> bool:
         # lists with parsed vertex attributes

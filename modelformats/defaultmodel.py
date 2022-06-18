@@ -9,6 +9,7 @@ from modelformats import get_extension, get_format_by_extension, register_format
 # default model format -- chooses format based on filename extension
 class DefaultModelFormat(ModelFormat):
     description: str = 'Default model format'
+    ext: str = ''
 
     def read(self, filename: str, model: geometry.Model, params: dict[str, str]) -> bool:
         ext = get_extension(filename)

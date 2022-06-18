@@ -8,9 +8,7 @@ import modelformats
 
 class ColobotNewTextFormat(modelformats.ModelFormat):
     description: str = 'Colobot New Text format'
-
-    def get_extension(self) -> str:
-        return 'txt'
+    ext: str = 'txt'
 
     def read(self, filename: str, model: geometry.Model, params: dict[str, str]) -> bool:
         input_file = open(filename, 'r', encoding='utf8')
