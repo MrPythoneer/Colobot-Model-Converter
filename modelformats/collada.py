@@ -2,9 +2,11 @@
 # Contains implementation of COLLADA .dae model format
 # Copyright (c) 2015 Tomasz Kapuściński
 
+from xml.dom import minidom
+
+
 import geometry
 from modelformats import ModelFormat, register_format, register_extension
-from xml.dom import minidom
 
 
 class COLLADAFormat(ModelFormat):
@@ -22,7 +24,7 @@ class COLLADAFormat(ModelFormat):
             material = geometry.Material()
 
             material_name = material_xml.getAttribute('name')
-            material_id = material_xml.getElementsByTagName('instance_effect')[0].getAttribute('url')[1:]
+            # material_id = material_xml.getElementsByTagName('instance_effect')[0].getAttribute('url')[1:]
 
             # finding proper effects tag
             # effect_xml = None
@@ -37,10 +39,10 @@ class COLLADAFormat(ModelFormat):
             materials[material_name] = material
 
         # parse vertex data
-        mesh_xml = xmldoc.getElementsByTagName('mesh')[0]
+        # mesh_xml = xmldoc.getElementsByTagName('mesh')[0]
 
         # vertex arrays
-        vertex_arrays: list[geometry.Vertex] = {}
+        # vertex_arrays: list[geometry.Vertex] = {}
 
         for source_xml in xmldoc.getElementsByTagName('source'):
             source_id = source_xml.getAttribute('id')
